@@ -189,24 +189,24 @@ def format_onix_date(dt: object, date_format: str) -> str:
         )
 
     if date_format == FMT_YYYYMMDD:
-        return dt.strftime("%Y%m%d")
+        date_return = dt.strftime("%Y%m%d")
 
-    if date_format == FMT_YYYYMM:
-        return dt.strftime("%Y%m")
+    elif date_format == FMT_YYYYMM:
+        date_return = dt.strftime("%Y%m")
 
-    if date_format == FMT_YYYY:
-        return dt.strftime("%Y")
+    elif date_format == FMT_YYYY:
+        date_return = dt.strftime("%Y")
 
-    if date_format == FMT_YYYYQ:
+    elif date_format == FMT_YYYYQ:
         quarter = (dt.month - 1) // 3 + 1
-        return f"{dt.year}{quarter}"
+        date_return = f"{dt.year}{quarter}"
 
-    if date_format == FMT_YYYYWNN:
+    elif date_format == FMT_YYYYWNN:
         iso = dt.isocalendar()
-        return f"{iso[0]}{iso[1]:02d}"
+        date_return = f"{iso[0]}{iso[1]:02d}"
 
     # Formats avec composante horaire — requiert un datetime
-    if date_format in (
+    elif date_format in (
         FMT_YYYYMMDD_THHMM,
         FMT_YYYYMMDD_THHMMSS,
         FMT_YYYYMMDD_THHMMSSZ,
@@ -218,9 +218,12 @@ def format_onix_date(dt: object, date_format: str) -> str:
                 f"Le format {date_format!r} requiert un objet datetime ; "
                 f"un objet date a été fourni."
             )
-        return _format_onix_datetime(dt, date_format)
+        date_return = _format_onix_datetime(dt, date_format)
 
-    raise ValueError(f"Code de format ONIX inconnu : {date_format!r}")
+    else:
+        raise ValueError(f"Code de format ONIX inconnu : {date_format!r}")
+
+    return date_return
 
 
 def _format_onix_datetime(dt: datetime, date_format: str) -> str:
