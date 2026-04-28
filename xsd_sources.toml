@@ -1,0 +1,24 @@
+# Sources des XSD ONIX par version
+# Utilisé par : onix-generate --from-file xsd_sources.toml
+#
+# Chaque version doit définir au minimum :
+#   source      = URL HTTPS ou chemin relatif (depuis ce fichier) vers les XSD
+#   description = texte libre
+#
+# Les chemins relatifs sont résolus depuis le répertoire de ce fichier (racine du projet).
+# Les URLs doivent pointer vers un fichier .zip ou un .xsd direct.
+#
+# Pour télécharger manuellement :
+#   onix-generate --from-file xsd_sources.toml --version 3.0
+#   onix-generate --from-file xsd_sources.toml          # toutes les versions
+
+[versions."3.0"]
+# Source locale (XSD déjà présents dans le dépôt)
+source      = "documentations/xsd_onix3/3.0"
+description = "ONIX 3.0 — version de référence (EDItEUR, 2009, rév. 2011)"
+# Pour re-télécharger depuis EDItEUR, décommenter :
+# source = "https://www.editeur.org/files/ONIX%203/ONIX_3-0_reference_XSD.zip"
+
+# [versions."3.1"]
+# source      = "https://www.editeur.org/files/ONIX%203/..."
+# description = "ONIX 3.1 — à venir"

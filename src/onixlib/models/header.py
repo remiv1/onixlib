@@ -1,307 +1,210 @@
-"""Module de modélisation du header d'un message ONIX.
+"""Facade for the ONIX 3.0 Header block.
 
-Ce module définit les dataclasses correspondant au bloc ``<Header>`` d'un
-message ONIX 3.0.  Chaque classe reflète fidèlement la hiérarchie XML :
+Wraps the xsdata-generated :class:`~onixlib.models.generated.v3_0.Header`
+dataclass and exposes ergonomic properties.
 
-.. code-block:: xml
+Example usage::
 
-    <Header>
-      <Sender>
-        <SenderIdentifier>
-          <SenderIDType>06</SenderIDType>
-          <IDValue>1234567890123</IDValue>
-        </SenderIdentifier>
-        <SenderName>Expéditeur Exemple</SenderName>
-        <EmailAddress>contact@exemple.fr</EmailAddress>
-      </Sender>
-      <Addressee>
-        <AddresseeIdentifier>
-          <AddresseeIDType>06</AddresseeIDType>
-          <IDValue>9876543210987</IDValue>
-        </AddresseeIdentifier>
-        <AddresseeName>Destinataire Exemple</AddresseeName>
-      </Addressee>
-      <MessageNumber>000000001</MessageNumber>
-      <SentDateTime>20260101T000000Z</SentDateTime>
-    </Header>
+    from onixlib.models.header import Header
 
-Chaque classe expose deux méthodes symétriques :
+    # Read from a parsed Notice:
+    header = notice.header
+    print(header.sender_name)
+    print(header.message_number)
 
-* ``from_xml(element)`` — désérialise un ``xml.etree.ElementTree.Element``
-  vers la dataclass.
-* ``to_xml()`` — sérialise la dataclass en ``xml.etree.ElementTree.Element``
-  prêt à être intégré dans un arbre XML.
+    # Build from scratch:
+    header = Header.new(
+        sender_name="DILICOM",
+        sent_datetime="20260428T040029Z",
+    )
+    header.sender_gln = "3025590000008"
+    header.sender_email = "bdd@dilicom.fr"
+    header.addressee_name = "EDITIONS EXEMPLE"
+    header.message_number = "000000001"
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Optional
-from xml.etree.ElementTree import Element, SubElement
+from onixlib.models.generated.v3_0 import (
+    Addressee as _Addressee,
+    AddresseeIdentifier as _AddresseeIdentifier,
+    AddresseeIdtype,
+    AddresseeName,
+    EmailAddress,
+    Header as _Header,
+    Idvalue,
+    List44,
+    MessageNumber,
+    Sender as _Sender,
+    SenderIdentifier as _SenderIdentifier,
+    SenderIdtype,
+    SenderName,
+    SentDateTime,
+)
 
-@dataclass
-class SenderIdentifier:
-    """Identifiant qualifié de l'expéditeur (bloc ``<SenderIdentifier>``).
+__all__ = ["Header"]
 
-    Un identifiant ONIX est toujours composé de deux éléments : un **type**
-    qui précise le référentiel utilisé (liste de codes ONIX 44, p. ex. ``06``
-    pour GLN) et une **valeur** dans ce référentiel.
-
-    Attributes:
-        sender_id_type: Code du type d'identifiant (liste de codes ONIX 44).
-            Exemple : ``"06"`` pour un GLN (Global Location Number).
-        id_value: Valeur de l'identifiant dans le référentiel désigné par
-            ``sender_id_type``. Exemple : ``"1234567890123"``.
-    """
-
-    sender_id_type: str
-    id_value: str
-
-    @staticmethod
-    def from_xml(element: Element) -> SenderIdentifier:
-        """Construit un :class:`SenderIdentifier` depuis un élément XML.
-
-        Args:
-            element: Élément ``<SenderIdentifier>`` issu du parsing XML.
-
-        Returns:
-            Instance peuplée avec les valeurs lues dans l'élément.
-        """
-        return SenderIdentifier(
-            sender_id_type=element.findtext("SenderIDType", ""),
-            id_value=element.findtext("IDValue", ""),
-        )
-
-    def to_xml(self) -> Element:
-        """Sérialise l'identifiant en élément ``<SenderIdentifier>``.
-
-        Returns:
-            Élément XML ``<SenderIdentifier>`` contenant ``<SenderIDType>``
-            et ``<IDValue>``.
-        """
-        el = Element("SenderIdentifier")
-        SubElement(el, "SenderIDType").text = self.sender_id_type
-        SubElement(el, "IDValue").text = self.id_value
-        return el
+_GLN_TYPE = List44.VALUE_06  # "06" — Global Location Number
 
 
-@dataclass
-class Sender:
-    """Expéditeur du message ONIX (bloc ``<Sender>``).
-
-    Identifie l'organisation qui génère et émet le fichier ONIX.  Le nom
-    est obligatoire ; l'identifiant structuré et l'adresse e-mail sont
-    facultatifs mais recommandés pour faciliter les rapprochements
-    automatiques entre partenaires.
-
-    Attributes:
-        sender_name: Nom lisible de l'expéditeur (élément ``<SenderName>``).
-            Exemple : ``"Expéditeur Exemple"``.
-        sender_identifier: Identifiant qualifié de l'expéditeur
-            (bloc ``<SenderIdentifier>``).  ``None`` si absent du message.
-        email_address: Adresse e-mail de contact de l'expéditeur
-            (élément ``<EmailAddress>``).  ``None`` si absente.
-    """
-
-    sender_name: str
-    sender_identifier: Optional[SenderIdentifier] = None
-    email_address: Optional[str] = None
-
-    @staticmethod
-    def from_xml(element: Element) -> Sender:
-        """Construit un :class:`Sender` depuis un élément XML.
-
-        Args:
-            element: Élément ``<Sender>`` issu du parsing XML.
-
-        Returns:
-            Instance peuplée avec les valeurs lues dans l'élément.
-        """
-        identifier_el = element.find("SenderIdentifier")
-        return Sender(
-            sender_name=element.findtext("SenderName", ""),
-            sender_identifier=SenderIdentifier.from_xml(identifier_el) \
-                                    if identifier_el is not None \
-                                    else None,
-            email_address=element.findtext("EmailAddress"),
-        )
-
-    def to_xml(self) -> Element:
-        """Sérialise l'expéditeur en élément ``<Sender>``.
-
-        Les éléments optionnels (``<SenderIdentifier>``, ``<EmailAddress>``)
-        ne sont inclus dans l'arbre que s'ils sont renseignés.
-
-        Returns:
-            Élément XML ``<Sender>`` complet.
-        """
-        el = Element("Sender")
-        if self.sender_identifier is not None:
-            el.append(self.sender_identifier.to_xml())
-        SubElement(el, "SenderName").text = self.sender_name
-        if self.email_address is not None:
-            SubElement(el, "EmailAddress").text = self.email_address
-        return el
-
-
-@dataclass
-class AddresseeIdentifier:
-    """Identifiant qualifié du destinataire (bloc ``<AddresseeIdentifier>``).
-
-    Symétrique de :class:`SenderIdentifier` mais appliqué au destinataire
-    du message.
-
-    Attributes:
-        addressee_id_type: Code du type d'identifiant (liste de codes ONIX 44).
-            Exemple : ``"06"`` pour un GLN.
-        id_value: Valeur de l'identifiant. Exemple : ``"9876543210987"``.
-    """
-
-    addressee_id_type: str
-    id_value: str
-
-    @staticmethod
-    def from_xml(element: Element) -> AddresseeIdentifier:
-        """Construit un :class:`AddresseeIdentifier` depuis un élément XML.
-
-        Args:
-            element: Élément ``<AddresseeIdentifier>`` issu du parsing XML.
-
-        Returns:
-            Instance peuplée avec les valeurs lues dans l'élément.
-        """
-        return AddresseeIdentifier(
-            addressee_id_type=element.findtext("AddresseeIDType", ""),
-            id_value=element.findtext("IDValue", ""),
-        )
-
-    def to_xml(self) -> Element:
-        """Sérialise l'identifiant en élément ``<AddresseeIdentifier>``.
-
-        Returns:
-            Élément XML ``<AddresseeIdentifier>`` contenant
-            ``<AddresseeIDType>`` et ``<IDValue>``.
-        """
-        el = Element("AddresseeIdentifier")
-        SubElement(el, "AddresseeIDType").text = self.addressee_id_type
-        SubElement(el, "IDValue").text = self.id_value
-        return el
-
-
-@dataclass
-class Addressee:
-    """Destinataire du message ONIX (bloc ``<Addressee>``).
-
-    Identifie l'organisation à qui le fichier ONIX est destiné.  Le nom
-    est obligatoire ; l'identifiant structuré est facultatif.
-
-    Attributes:
-        addressee_name: Nom lisible du destinataire (élément
-            ``<AddresseeName>``).  Exemple : ``"Destinataire Exemple"``.
-        addressee_identifier: Identifiant qualifié du destinataire
-            (bloc ``<AddresseeIdentifier>``).  ``None`` si absent du message.
-    """
-
-    addressee_name: str
-    addressee_identifier: Optional[AddresseeIdentifier] = None
-
-    @staticmethod
-    def from_xml(element: Element) -> Addressee:
-        """Construit un :class:`Addressee` depuis un élément XML.
-
-        Args:
-            element: Élément ``<Addressee>`` issu du parsing XML.
-
-        Returns:
-            Instance peuplée avec les valeurs lues dans l'élément.
-        """
-        identifier_el = element.find("AddresseeIdentifier")
-        return Addressee(
-            addressee_name=element.findtext("AddresseeName", ""),
-            addressee_identifier=AddresseeIdentifier.from_xml(identifier_el) \
-                                        if identifier_el is not None \
-                                        else None,
-        )
-
-    def to_xml(self) -> Element:
-        """Sérialise le destinataire en élément ``<Addressee>``.
-
-        L'élément ``<AddresseeIdentifier>`` n'est inclus que s'il est
-        renseigné.
-
-        Returns:
-            Élément XML ``<Addressee>`` complet.
-        """
-        el = Element("Addressee")
-        if self.addressee_identifier is not None:
-            el.append(self.addressee_identifier.to_xml())
-        SubElement(el, "AddresseeName").text = self.addressee_name
-        return el
-
-
-@dataclass
 class Header:
-    """En-tête d'un message ONIX (bloc ``<Header>``).
+    """Ergonomic facade over the ONIX :class:`Header` dataclass."""
 
-    Le header est le premier bloc d'un message ONIX.  Il identifie
-    l'expéditeur, le destinataire, numérote le message et horodate son
-    envoi.  Ces informations sont indispensables pour tracer les échanges
-    et détecter d'éventuels messages manquants ou dupliqués.
+    def __init__(self, raw: _Header) -> None:
+        self._raw = raw
 
-    Attributes:
-        sender: Expéditeur du message (bloc ``<Sender>``).
-        addressee: Destinataire du message (bloc ``<Addressee>``).
-        message_number: Numéro séquentiel du message (élément
-            ``<MessageNumber>``).  Exemple : ``"000000001"``.
-        sent_datetime: Horodatage d'envoi au format ONIX
-            (élément ``<SentDateTime>``).  Exemple : ``"20260101T000000Z"``
-            (voir liste de codes ONIX 55 pour les formats supportés).
-    """
+    # ------------------------------------------------------------------ #
+    # Factory                                                              #
+    # ------------------------------------------------------------------ #
 
-    sender: Sender
-    addressee: Addressee
-    message_number: str
-    sent_datetime: str
-
-    @staticmethod
-    def from_xml(element: Element) -> Header:
-        """Construit un :class:`Header` depuis un élément XML.
+    @classmethod
+    def new(cls, sender_name: str, sent_datetime: str) -> "Header":
+        """Create a minimal Header with the required fields.
 
         Args:
-            element: Élément ``<Header>`` issu du parsing XML.
-
-        Returns:
-            Instance peuplée avec les valeurs lues dans l'élément.
-            Si les blocs ``<Sender>`` ou ``<Addressee>`` sont absents,
-            des instances vides sont utilisées en repli.
+            sender_name:    Human-readable name of the sender organisation.
+            sent_datetime:  Timestamp in ONIX format, e.g. ``"20260428T040029Z"``.
         """
-        sender_el = element.find("Sender")
-        addressee_el = element.find("Addressee")
-        return Header(
-            sender=Sender.from_xml(sender_el)
-                        if sender_el is not None
-                        else Sender(sender_name=""),
-            addressee=Addressee.from_xml(addressee_el)
-                        if addressee_el is not None
-                        else Addressee(addressee_name=""),
-            message_number=element.findtext("MessageNumber", ""),
-            sent_datetime=element.findtext("SentDateTime", ""),
+        raw = _Header(
+            sender=_Sender(sender_name=SenderName(value=sender_name)),
+            sent_date_time=SentDateTime(value=sent_datetime),
+        )
+        return cls(raw)
+
+    # ------------------------------------------------------------------ #
+    # Sender                                                               #
+    # ------------------------------------------------------------------ #
+
+    @property
+    def sender_name(self) -> str:
+        """Human-readable name of the message sender."""
+        return self._raw.sender.sender_name.value if self._raw.sender.sender_name else ""
+
+    @sender_name.setter
+    def sender_name(self, value: str) -> None:
+        if self._raw.sender.sender_name is None:
+            self._raw.sender.sender_name = SenderName(value=value)
+        else:
+            self._raw.sender.sender_name.value = value
+
+    @property
+    def sender_gln(self) -> str | None:
+        """GLN (Global Location Number) of the sender, or ``None`` if absent."""
+        for si in self._raw.sender.sender_identifier:
+            if si.sender_idtype.value == _GLN_TYPE:
+                return si.idvalue.value
+        return None
+
+    @sender_gln.setter
+    def sender_gln(self, value: str) -> None:
+        for si in self._raw.sender.sender_identifier:
+            if si.sender_idtype.value == _GLN_TYPE:
+                si.idvalue.value = value
+                return
+        self._raw.sender.sender_identifier.append(
+            _SenderIdentifier(
+                sender_idtype=SenderIdtype(value=_GLN_TYPE),
+                idvalue=Idvalue(value=value),
+            )
         )
 
-    def to_xml(self) -> Element:
-        """Sérialise le header en élément ``<Header>``.
+    @property
+    def sender_email(self) -> str | None:
+        """Email address of the sender, or ``None`` if absent."""
+        return self._raw.sender.email_address.value if self._raw.sender.email_address else None
 
-        Les sous-éléments sont générés dans l'ordre prescrit par la norme
-        ONIX : ``<Sender>``, ``<Addressee>``, ``<MessageNumber>``,
-        ``<SentDateTime>``.
+    @sender_email.setter
+    def sender_email(self, value: str) -> None:
+        if self._raw.sender.email_address is None:
+            self._raw.sender.email_address = EmailAddress(value=value)
+        else:
+            self._raw.sender.email_address.value = value
 
-        Returns:
-            Élément XML ``<Header>`` complet, prêt à être inséré dans
-            un arbre ``ONIXMessage``.
-        """
-        el = Element("Header")
-        el.append(self.sender.to_xml())
-        el.append(self.addressee.to_xml())
-        SubElement(el, "MessageNumber").text = self.message_number
-        SubElement(el, "SentDateTime").text = self.sent_datetime
-        return el
+    # ------------------------------------------------------------------ #
+    # Addressee                                                            #
+    # ------------------------------------------------------------------ #
+
+    @property
+    def addressee_name(self) -> str | None:
+        """Human-readable name of the message addressee, or ``None`` if absent."""
+        if not self._raw.addressee:
+            return None
+        addr = self._raw.addressee[0]
+        return addr.addressee_name.value if addr.addressee_name else None
+
+    @addressee_name.setter
+    def addressee_name(self, value: str) -> None:
+        if not self._raw.addressee:
+            self._raw.addressee.append(
+                _Addressee(addressee_name=AddresseeName(value=value))
+            )
+        else:
+            addr = self._raw.addressee[0]
+            if addr.addressee_name is None:
+                addr.addressee_name = AddresseeName(value=value)
+            else:
+                addr.addressee_name.value = value
+
+    @property
+    def addressee_gln(self) -> str | None:
+        """GLN of the addressee, or ``None`` if absent."""
+        if not self._raw.addressee:
+            return None
+        for ai in self._raw.addressee[0].addressee_identifier:
+            if ai.addressee_idtype.value == _GLN_TYPE:
+                return ai.idvalue.value
+        return None
+
+    @addressee_gln.setter
+    def addressee_gln(self, value: str) -> None:
+        if not self._raw.addressee:
+            self._raw.addressee.append(_Addressee())
+        addr = self._raw.addressee[0]
+        for ai in addr.addressee_identifier:
+            if ai.addressee_idtype.value == _GLN_TYPE:
+                ai.idvalue.value = value
+                return
+        addr.addressee_identifier.append(
+            _AddresseeIdentifier(
+                addressee_idtype=AddresseeIdtype(value=_GLN_TYPE),
+                idvalue=Idvalue(value=value),
+            )
+        )
+
+    # ------------------------------------------------------------------ #
+    # Message metadata                                                     #
+    # ------------------------------------------------------------------ #
+
+    @property
+    def message_number(self) -> str | None:
+        """Sequential message number, or ``None`` if absent."""
+        return self._raw.message_number.value if self._raw.message_number else None
+
+    @message_number.setter
+    def message_number(self, value: str) -> None:
+        if self._raw.message_number is None:
+            self._raw.message_number = MessageNumber(value=value)
+        else:
+            self._raw.message_number.value = value
+
+    @property
+    def sent_datetime(self) -> str:
+        """Send timestamp in ONIX format (e.g. ``"20260428T040029Z"``)."""
+        return self._raw.sent_date_time.value
+
+    @sent_datetime.setter
+    def sent_datetime(self, value: str) -> None:
+        self._raw.sent_date_time.value = value
+
+    # ------------------------------------------------------------------ #
+    # Raw access                                                           #
+    # ------------------------------------------------------------------ #
+
+    @property
+    def raw(self) -> _Header:
+        """Returns the underlying xsdata :class:`Header` dataclass."""
+        return self._raw
+
+    def __repr__(self) -> str:
+        return f"Header(sender={self.sender_name!r}, message_number={self.message_number!r})"
+

@@ -6,7 +6,9 @@ authors = [{name="Rémi Verschuur", email="rverschuur@audit-io.fr"}]
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11, <3.15"
-dependencies = []
+dependencies = [
+    "xsdata>=26.0",
+]
 keywords = ["livres", "édition", "ONIX", "distribution"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -23,6 +25,17 @@ classifiers = [
     "Natural Language :: French",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "xsdata[cli]>=24.0",
+    "sphinx>=7.0",
+    "sphinx-autodoc-typehints>=2.0",
+    "furo",                         # thème Sphinx moderne
+]
+
+[project.scripts]
+onix-generate = "onixlib.cli.generate:main"
+
 [project.urls]
 Homepage = "https://github.com/remiv1/onixlib"
 Repository = "https://github.com/remiv1/onixlib"
@@ -37,3 +50,17 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "dilicom_parser.utils" = ["*.toml"]
+
+# ---------------------------------------------------------------------------
+# xsdata — configuration de génération
+# (sert de référence ; les paramètres sont passés explicitement via le CLI)
+# ---------------------------------------------------------------------------
+[tool.xsdata]
+package = "onixlib.models.generated"
+
+[tool.xsdata.output]
+path = "src"
+structure = "single-package"
+docstring_style = "reStructuredText"
+format = "dataclasses"
+

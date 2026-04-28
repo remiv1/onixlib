@@ -1,0 +1,11 @@
+version = "3.0"
+source = "documentations/xsd_onix3/3.0"
+generated_at = "2026-04-28T13:52:44.226369+00:00"
+
+[files]
+"ONIX_BookProduct_3.0_reference.xsd" = "7aaec59a043a92ce445e39b94ac20e3aca86812a5d35e684b1648fc59e4d56f6"
+"ONIX_BookProduct_3.0_short.xsd" = "46cf0ef87a7c4ea90b268028dd08dbe619bcefed4c10f3be14798edfceeac53c"
+"ONIX_BookProduct_CodeLists.xsd" = "439b592144b0ca52244fbb1b96a0d26e42a00df5b254464ba8bef9dd6168ba19"
+"ONIX_XHTML_Subset.xsd" = "16071c1f2605e8b82240164d79230a02ed65f0ea6b968b13862de6fc2b476c70"
+"ONIX_XHTML_Subset_reference.xsd" = "16071c1f2605e8b82240164d79230a02ed65f0ea6b968b13862de6fc2b476c70"
+"ONIX_XHTML_Subset_short.xsd" = "16071c1f2605e8b82240164d79230a02ed65f0ea6b968b13862de6fc2b476c70"
