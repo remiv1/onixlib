@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ONIXMessage release="3.0" xmlns="http://www.editeur.org/onix/3.0/reference">
+  <Header>
+    <Sender>
+      <SenderName>SEUL</SenderName>
+    </Sender>
+    <SentDateTime>20260101T000000Z</SentDateTime>
+  </Header>
+</ONIXMessage>

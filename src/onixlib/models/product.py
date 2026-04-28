@@ -58,7 +58,7 @@ _GTIN13_TYPE = List5.VALUE_03  # "03" – GTIN-13
 _context = XmlContext()
 _serializer = XmlSerializer(
     context=_context,
-    config=SerializerConfig(pretty_print=True, xml_declaration=True),
+    config=SerializerConfig(indent="  ", xml_declaration=True),
 )
 
 

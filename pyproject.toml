@@ -31,6 +31,9 @@ dev = [
     "sphinx>=7.0",
     "sphinx-autodoc-typehints>=2.0",
     "furo",                         # thème Sphinx moderne
+    "pytest>=9.0",
+    "build",
+    "twine",
 ]
 
 [project.scripts]
@@ -55,6 +58,13 @@ where = ["src"]
 # xsdata — configuration de génération
 # (sert de référence ; les paramètres sont passés explicitement via le CLI)
 # ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["src/onixlib/tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
 [tool.xsdata]
 package = "onixlib.models.generated"
 
