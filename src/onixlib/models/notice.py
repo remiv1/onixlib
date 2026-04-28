@@ -55,7 +55,7 @@ _xml_context = XmlContext()
 _xml_parser = XmlParser(context=_xml_context)
 _xml_serializer = XmlSerializer(
     context=_xml_context,
-    config=SerializerConfig(pretty_print=True, xml_declaration=True),
+    config=SerializerConfig(indent="  ", xml_declaration=True),
 )
 
 _DEFAULT_RELEASE = "3.0"

@@ -2,7 +2,7 @@ PYTHON      = python
 SOURCES_FILE = xsd_sources.toml
 
 .PHONY: help install-dev generate generate-all generate-from verify-xsd \
-        docs docs-serve docs-copy clean-generated
+        docs docs-init docs-serve docs-copy clean-generated test build clean-dist release
 
 # ---------------------------------------------------------------------------
 help:
@@ -23,8 +23,14 @@ help:
 	@echo "  list-versions        Liste les versions et leur statut"
 	@echo ""
 	@echo "  docs                 Génère la documentation Sphinx (HTML)"
+	@echo "  docs-init            Initialise conf.py et index.rst si absents (1ère fois)"
 	@echo "  docs-copy            Copie la doc de documentations/sphinxdoc/ vers docs/"
 	@echo "  docs-serve           Lance un serveur local sur la documentation"
+	@echo ""
+	@echo "  test                 Lance les tests pytest"
+	@echo "  build                Génère le package PyPI (dist/)"
+	@echo "  clean-dist           Supprime les artefacts de build"
+	@echo "  release              test + docs + build (prêt à publier)"
 	@echo ""
 	@echo "  clean-generated      Supprime les modèles générés (demande confirmation)"
 	@echo ""
@@ -85,6 +91,22 @@ list-versions:
 # Documentation Sphinx
 # ---------------------------------------------------------------------------
 
+docs-init:
+	@if [ ! -f docs/source/conf.py ]; then \
+		sphinx-quickstart docs/source \
+			--no-sep \
+			--project onixlib \
+			--author "Rémi Verschuur" \
+			-v 0.1.0 \
+			--release 0.1.0 \
+			--language fr \
+			--ext-autodoc \
+			--quiet; \
+		echo "  conf.py et index.rst générés dans docs/source/"; \
+	else \
+		echo "  docs/source/conf.py déjà présent — rien à faire."; \
+	fi
+
 docs:
 	sphinx-apidoc -f -e -o docs/source src/onixlib
 	sphinx-build -b html docs/source docs/build/html
@@ -101,6 +123,38 @@ docs-copy:
 
 docs-serve: docs
 	$(PYTHON) -m http.server 8080 --directory docs/build/html
+
+# ---------------------------------------------------------------------------
+# Tests
+# ---------------------------------------------------------------------------
+
+test:
+	$(PYTHON) -m pytest
+
+# ---------------------------------------------------------------------------
+# Build PyPI
+# ---------------------------------------------------------------------------
+
+clean-dist:
+	rm -rf dist/ build/ src/*.egg-info
+
+build: clean-dist
+	$(PYTHON) -m build
+	@echo ""
+	@echo "  Package généré dans dist/"
+
+# ---------------------------------------------------------------------------
+# Release (tests + doc + build)
+# ---------------------------------------------------------------------------
+
+release: test docs build
+	@echo ""
+	@echo "  Tests OK"
+	@echo "  Documentation dans docs/build/html/"
+	@echo "  Package dans dist/"
+	@echo ""
+	@echo "  Pour publier sur PyPI  : twine upload dist/*"
+	@echo "  Pour taguer sur GitHub : git tag vX.Y.Z && git push origin main --tags"
 
 # ---------------------------------------------------------------------------
 # Nettoyage
