@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Any
-from onixlib.models.generated.v3_0 import (  # pylint: disable=unused-import
+from .generated.v3_0 import (  # pylint: disable=unused-import
     Contributor as _Contributor,  # pylint: disable=unused-import
     ContributorRole as _ContributorRole,  # pylint: disable=unused-import
     DescriptiveDetail as _DescriptiveDetail,  # pylint: disable=unused-import
@@ -19,7 +19,7 @@ from onixlib.models.generated.v3_0 import (  # pylint: disable=unused-import
     TitleText,  # pylint: disable=unused-import
     TitleType,  # pylint: disable=unused-import
 )  # pylint: disable=unused-import
-from onixlib.models.contributor import Contributor, ContributorRole
+from .contributor import Contributor, ContributorRole
 
 __all__ = ["DescriptiveDetail"]
 

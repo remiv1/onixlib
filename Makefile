@@ -2,7 +2,7 @@ PYTHON      = python
 SOURCES_FILE = xsd_sources.toml
 
 .PHONY: help install-dev generate generate-all generate-from verify-xsd \
-        docs docs-serve clean-generated
+        docs docs-serve docs-copy clean-generated
 
 # ---------------------------------------------------------------------------
 help:
@@ -23,6 +23,7 @@ help:
 	@echo "  list-versions        Liste les versions et leur statut"
 	@echo ""
 	@echo "  docs                 Génère la documentation Sphinx (HTML)"
+	@echo "  docs-copy            Copie la doc de documentations/sphinxdoc/ vers docs/"
 	@echo "  docs-serve           Lance un serveur local sur la documentation"
 	@echo ""
 	@echo "  clean-generated      Supprime les modèles générés (demande confirmation)"
@@ -89,6 +90,14 @@ docs:
 	sphinx-build -b html docs/source docs/build/html
 	@echo ""
 	@echo "  Documentation générée dans docs/build/html/index.html"
+
+docs-copy:
+	@if [ -z "$$(ls -A documentations/sphinxdoc 2>/dev/null)" ]; then \
+		echo "AVERTISSEMENT : documentations/sphinxdoc/ est vide — rien à copier."; \
+	else \
+		cp -r documentations/sphinxdoc/. docs/; \
+		echo "  Contenu de documentations/sphinxdoc/ copié vers docs/"; \
+	fi
 
 docs-serve: docs
 	$(PYTHON) -m http.server 8080 --directory docs/build/html

@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from onixlib.models.generated.v3_0 import (
+from typing import Any
+from .generated.v3_0 import (
     List163,
     PublishingDetail as _PublishingDetail,
 )
@@ -32,13 +33,12 @@ class PublishingDetail:
 
     @imprint_name.setter
     def imprint_name(self, value: str) -> None:
-        from onixlib.models.generated.v3_0 import Imprint as _Imprint, ImprintName
+        from .generated.v3_0 import Imprint as _Imprint, ImprintName    # pylint: disable=import-outside-toplevel
         if not self._raw.imprint:
             self._raw.imprint.append(_Imprint(imprint_name=ImprintName(value=value)))
         else:
             imp = self._raw.imprint[0]
             if imp.imprint_name is None:
-                from onixlib.models.generated.v3_0 import ImprintName
                 imp.imprint_name = ImprintName(value=value)
             else:
                 imp.imprint_name.value = value
@@ -96,7 +96,7 @@ class PublishingDetail:
 
         Role codes come from List 163.
         """
-        result = []
+        result: list[tuple[Any, Any]] = []
         for pd in self._raw.publishing_date:
             role = pd.publishing_date_role.value.value if pd.publishing_date_role else ""
             date = pd.date.value if pd.date else ""

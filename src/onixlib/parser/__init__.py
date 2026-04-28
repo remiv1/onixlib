@@ -6,6 +6,6 @@ For backward compatibility, this module re-exports :func:`parse` from
 Prefer importing directly from :mod:`onixlib` or :mod:`onixlib.models.notice`.
 """
 
-from onixlib.models.notice import parse  # noqa: F401
+from ..models.notice import parse  # noqa: F401
 
 __all__ = ["parse"]

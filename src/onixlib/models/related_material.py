@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from onixlib.models.generated.v3_0 import (
+from .generated.v3_0 import (
     List5,
     RelatedMaterial as _RelatedMaterial,
     RelatedProduct as _RelatedProduct,
@@ -33,7 +33,7 @@ class RelatedProduct:
     def isbn(self) -> str | None:
         """ISBN-13 of the related product, or ``None`` if not available."""
         for pi in self._raw.product_identifier:
-            if pi.product_id_type and pi.product_id_type.value == _ISBN13_TYPE:
+            if pi.product_idtype and pi.product_idtype.value == _ISBN13_TYPE:
                 return pi.idvalue.value if pi.idvalue else None
         return None
 
@@ -76,7 +76,8 @@ class RelatedWork:
         return self._raw
 
     def __repr__(self) -> str:
-        return f"RelatedWork(relation={self.relation_code!r}, identifiers={self.work_identifiers!r})"
+        r = f"RelatedWork(relation={self.relation_code!r}, identifiers={self.work_identifiers!r})"
+        return r
 
 
 class RelatedMaterial:

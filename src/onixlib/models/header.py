@@ -25,7 +25,7 @@ Example usage::
 
 from __future__ import annotations
 
-from onixlib.models.generated.v3_0 import (
+from .generated.v3_0 import (
     Addressee as _Addressee,
     AddresseeIdentifier as _AddresseeIdentifier,
     AddresseeIdtype,
@@ -178,14 +178,14 @@ class Header:
     @property
     def message_number(self) -> str | None:
         """Sequential message number, or ``None`` if absent."""
-        return self._raw.message_number.value if self._raw.message_number else None
+        return str(self._raw.message_number.value) if self._raw.message_number else None
 
     @message_number.setter
     def message_number(self, value: str) -> None:
         if self._raw.message_number is None:
-            self._raw.message_number = MessageNumber(value=value)
+            self._raw.message_number = MessageNumber(value=int(value))
         else:
-            self._raw.message_number.value = value
+            self._raw.message_number.value = int(value)
 
     @property
     def sent_datetime(self) -> str:
@@ -207,4 +207,3 @@ class Header:
 
     def __repr__(self) -> str:
         return f"Header(sender={self.sender_name!r}, message_number={self.message_number!r})"
-

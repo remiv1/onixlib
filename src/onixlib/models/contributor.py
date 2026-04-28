@@ -18,7 +18,7 @@ Exemple d'utilisation :
 
 from __future__ import annotations
 
-from onixlib.models.generated.v3_0 import (
+from .generated.v3_0 import (
     Contributor as _Contributor,
     ContributorRole as _ContributorRole,
     KeyNames,

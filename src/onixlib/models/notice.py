@@ -41,13 +41,13 @@ from xsdata.formats.dataclass.parsers import XmlParser
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-from onixlib.models.generated.v3_0 import (
+from .generated.v3_0 import (
     Onixmessage as _Onixmessage,
     OnixmessageRelease,
 )
-from onixlib.models.header import Header
-from onixlib.models.product import Product
-from onixlib.models import versions as _versions
+from .header import Header
+from .product import Product
+from . import versions as _versions
 
 __all__ = ["Notice", "parse"]
 
@@ -112,10 +112,10 @@ def parse(
             product_class = info.product_class
         elif event == "end" and product_tag and elem.tag == product_tag:
             xml_bytes = tostring(elem, encoding="unicode").encode("utf-8")
-            raw_product = _xml_parser.parse(
+            raw_product = _xml_parser.parse(  # pyright: ignore[reportUnknownVariableType]
                 BytesIO(xml_bytes), product_class
             )
-            yield Product(raw_product)
+            yield Product(raw_product)  # pyright: ignore[reportUnknownArgumentType]
             elem.clear()
 
 
@@ -230,7 +230,7 @@ class Notice:
     def to_xml(self) -> str:
         """Serialize this notice to an ONIX 3.0 XML string."""
         out = StringIO()
-        _xml_serializer.write(out, self._raw)
+        _xml_serializer.write(out, self._raw)  # type: ignore[misc]
         return out.getvalue()
 
     # ------------------------------------------------------------------ #

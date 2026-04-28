@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from decimal import Decimal
 
-from onixlib.models.generated.v3_0 import (
+from .generated.v3_0 import (
     Price as _Price,
     ProductSupply as _ProductSupply,
     SupplyDetail as _SupplyDetail,
@@ -55,8 +55,6 @@ class SupplyDetail:
     @property
     def supplier_name(self) -> str | None:
         """Name of the supplier, or ``None`` if absent."""
-        if self._raw.supplier is None:
-            return None
         return self._raw.supplier.supplier_name.value if self._raw.supplier.supplier_name else None
 
     @property
@@ -65,8 +63,6 @@ class SupplyDetail:
 
         Common values: ``"20"`` = available, ``"40"`` = not yet available.
         """
-        if self._raw.product_availability is None:
-            return None
         return self._raw.product_availability.value.value
 
     @property

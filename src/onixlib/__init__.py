@@ -30,17 +30,17 @@ Minimal usage::
     print(product.to_xml())
 """
 
-from onixlib.models.book import Book  # backward compat alias
-from onixlib.models.collateral import CollateralDetail
-from onixlib.models.contributor import Contributor, ContributorRole
-from onixlib.models.descriptive import DescriptiveDetail
-from onixlib.models.header import Header
-from onixlib.models.notice import Notice, parse
-from onixlib.models.product import Product
-from onixlib.models.product_supply import Price, ProductSupply, SupplyDetail
-from onixlib.models.publishing import PublishingDetail
-from onixlib.models.related_material import RelatedMaterial, RelatedProduct, RelatedWork
-from onixlib.models.versions import VersionInfo, available_releases, register
+from .models.book import Book  # backward compat alias
+from .models.collateral import CollateralDetail
+from .models.contributor import Contributor, ContributorRole
+from .models.descriptive import DescriptiveDetail
+from .models.header import Header
+from .models.notice import Notice, parse
+from .models.product import Product
+from .models.product_supply import Price, ProductSupply, SupplyDetail
+from .models.publishing import PublishingDetail
+from .models.related_material import RelatedMaterial, RelatedProduct, RelatedWork
+from .models.versions import VersionInfo, available_releases, register
 
 __all__ = [
     "Book",

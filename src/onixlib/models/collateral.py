@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Any
-from onixlib.models.generated.v3_0 import (
+from .generated.v3_0 import (
     CollateralDetail as _CollateralDetail,
     List153,
     List158,

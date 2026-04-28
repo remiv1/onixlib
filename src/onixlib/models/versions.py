@@ -94,7 +94,7 @@ def available_releases() -> list[str]:
 # Built-in version registrations                                              #
 # --------------------------------------------------------------------------- #
 
-from onixlib.models.generated import v3_0 as _v3_0  # pylint: disable=wrong-import-position
+from .generated import v3_0 as _v3_0  # pylint: disable=wrong-import-position
 
 register(VersionInfo(
     release="3.0",

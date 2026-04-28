@@ -28,10 +28,10 @@ from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 
-from onixlib.models.collateral import CollateralDetail
-from onixlib.models.contributor import Contributor, ContributorRole
-from onixlib.models.descriptive import DescriptiveDetail
-from onixlib.models.generated.v3_0 import (
+from .collateral import CollateralDetail
+from .contributor import Contributor, ContributorRole
+from .descriptive import DescriptiveDetail
+from .generated.v3_0 import (
     DescriptiveDetail as _DescriptiveDetail,
     Idvalue,
     List1,
@@ -46,9 +46,9 @@ from onixlib.models.generated.v3_0 import (
     ProductIdtype,
     RecordReference,
 )
-from onixlib.models.product_supply import ProductSupply
-from onixlib.models.publishing import PublishingDetail
-from onixlib.models.related_material import RelatedMaterial
+from .product_supply import ProductSupply
+from .publishing import PublishingDetail
+from .related_material import RelatedMaterial
 
 __all__ = ["Product"]
 
@@ -222,7 +222,7 @@ class Product:
     def to_xml(self) -> str:
         """Serialize this product to an ONIX 3.0 XML string."""
         out = StringIO()
-        _serializer.write(out, self._raw)
+        _serializer.write(out, self._raw)  # pyright: ignore[reportUnknownMemberType]
         return out.getvalue()
 
     # ------------------------------------------------------------------ #
