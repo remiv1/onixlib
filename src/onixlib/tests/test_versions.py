@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pytest   # pyright: ignore[reportUnusedImport] # pylint: disable=unused-import
+import types
 
 from onixlib.models import versions as _ver
 from onixlib.models.versions import VersionInfo, available_releases, detect_release, get, register
@@ -13,7 +14,6 @@ from onixlib.models.versions import VersionInfo, available_releases, detect_rele
 # ---------------------------------------------------------------------------
 
 def _make_fake_version(release: str, namespace: str) -> VersionInfo:
-    import types    # pylint: disable=import-outside-toplevel
 
     mod = types.ModuleType(f"fake_{release.replace('.', '_')}")
 
