@@ -1,9 +1,24 @@
-# onixlib
+<div align="center" style="padding: 2.5rem 1rem 2rem; background: linear-gradient(160deg, #0d1117 0%, #161b22 70%, #1c2333 100%); border-radius: 16px; border: 1px solid rgba(56,139,253,0.18); margin-bottom: 1.5rem;">
 
-[![PyPi version](https://img.shields.io/pypi/v/onixlib)](https://pypi.org/project/onixlib/)
-[![Licence MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Python](https://img.shields.io/pypi/pyversions/onixlib)](https://pypi.org/project/onixlib/)
-[![ONIX 3.0](https://img.shields.io/badge/ONIX-3.0-blue)](https://www.editeur.org/onix.html)
+<img src="./logo.png" width="148" alt="Logo onixlib"
+  style="filter: drop-shadow(0 0 18px rgba(56,139,253,0.4)) drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+         border-radius: 12px;
+         transition: transform 0.3s ease, filter 0.3s ease;" />
+
+<h1 style="color: #e6edf3; font-size: 2.5rem; font-weight: 700; letter-spacing: 0.05em;
+           text-shadow: 0 0 28px rgba(56,139,253,0.35), 0 2px 6px rgba(0,0,0,0.7);
+           margin: 1rem 0 0.6rem;">onixlib</h1>
+
+<p style="color: #8b949e; font-size: 0.95rem; margin: 0 0 1.4rem 0; max-width: 480px;">
+Bibliothèque Python souveraine pour lire, parser et produire des fichiers ONIX
+</p>
+
+<a href="https://pypi.org/project/onixlib/"><img src="https://img.shields.io/pypi/v/onixlib" alt="PyPi version" /></a>&nbsp;
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="Licence MIT" /></a>&nbsp;
+<a href="https://pypi.org/project/onixlib/"><img src="https://img.shields.io/pypi/pyversions/onixlib" alt="Python" /></a>&nbsp;
+<a href="https://www.editeur.org/onix.html"><img src="https://img.shields.io/badge/ONIX-3.0-blue" alt="ONIX 3.0" /></a>
+
+</div>
 
 **onixlib** est une bibliothèque Python souveraine pour lire, parser et produire des fichiers ONIX — le standard d'échange de métadonnées du monde du livre.
 
