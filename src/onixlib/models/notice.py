@@ -231,7 +231,7 @@ class Notice:
         """Serialize this notice to an ONIX 3.0 XML string."""
         out = StringIO()
         _xml_serializer.write(out, self._raw)  # type: ignore[misc]
-        return out.getvalue()
+        return out.getvalue().replace('ns0:', '')
 
     # ------------------------------------------------------------------ #
     # Raw access                                                           #

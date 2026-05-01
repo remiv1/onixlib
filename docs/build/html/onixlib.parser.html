@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Recherche" href="search.html"><link rel="next" title="onixlib.tests package" href="onixlib.tests.html"><link rel="prev" title="onixlib.models.versions module" href="onixlib.models.versions.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Recherche" href="search.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>onixlib.parser package - Documentation onixlib 0.1.0</title>
@@ -191,9 +191,9 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Référence API</span></p>
-<ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">onixlib</a><input aria-label="Toggle navigation of onixlib" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="onixlib.html">onixlib package</a><input aria-label="Toggle navigation of onixlib package" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">onixlib</a><input aria-label="Toggle navigation of onixlib" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="onixlib.html">onixlib package</a><input aria-label="Toggle navigation of onixlib package" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="onixlib.cli.html">onixlib.cli package</a><input aria-label="Toggle navigation of onixlib.cli package" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.cli.generate.html">onixlib.cli.generate module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.cli.meta.html">onixlib.cli.meta module</a></li>
@@ -218,7 +218,6 @@
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.versions.html">onixlib.models.versions module</a></li>
 </ul>
 </li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">onixlib.parser package</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="onixlib.tests.html">onixlib.tests package</a><input aria-label="Toggle navigation of onixlib.tests package" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.tests.test_contributor.html">onixlib.tests.test_contributor module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.tests.test_header.html">onixlib.tests.test_header module</a></li>
@@ -276,41 +275,8 @@
         <article role="main" id="furo-main-content">
           <section id="onixlib-parser-package">
 <h1>onixlib.parser package<a class="headerlink" href="#onixlib-parser-package" title="Lien vers cette rubrique">¶</a></h1>
-<section id="module-onixlib.parser">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-onixlib.parser" title="Lien vers cette rubrique">¶</a></h2>
-<p>Streaming ONIX 3.0 parser.</p>
-<p>For backward compatibility, this module re-exports <a class="reference internal" href="#onixlib.parser.parse" title="onixlib.parser.parse"><code class="xref py py-func docutils literal notranslate"><span class="pre">parse()</span></code></a> from
-<a class="reference internal" href="onixlib.models.notice.html#module-onixlib.models.notice" title="onixlib.models.notice"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onixlib.models.notice</span></code></a>.</p>
-<p>Prefer importing directly from <a class="reference internal" href="onixlib.html#module-onixlib" title="onixlib"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onixlib</span></code></a> or <a class="reference internal" href="onixlib.models.notice.html#module-onixlib.models.notice" title="onixlib.models.notice"><code class="xref py py-mod docutils literal notranslate"><span class="pre">onixlib.models.notice</span></code></a>.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="onixlib.parser.parse">
-<span class="sig-prename descclassname"><span class="pre">onixlib.parser.</span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#onixlib.parser.parse" title="Lien vers cette définition">¶</a></dt>
-<dd><p>Stream an ONIX file, yielding one <code class="xref py py-class docutils literal notranslate"><span class="pre">Product</span></code> per <code class="docutils literal notranslate"><span class="pre">&lt;Product&gt;</span></code>.</p>
-<p>Each <code class="docutils literal notranslate"><span class="pre">&lt;Product&gt;</span></code> element is deserialised independently via xsdata so
-the entire file is never held in memory at once.  This is the recommended
-approach for large ONIX feeds.</p>
-<p>The ONIX version is auto-detected from the <code class="docutils literal notranslate"><span class="pre">release</span></code> attribute on the
-root element.  Pass <em>version</em> explicitly (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;3.0&quot;</span></code>) to skip
-detection or to force a specific version.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>source</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">BinaryIO</span></code></span>) – Path to the XML file (<code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code>),
-or a binary file object opened for reading.</p></li>
-<li><p><strong>version</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – ONIX release string (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;3.0&quot;</span></code>).  When <code class="docutils literal notranslate"><span class="pre">None</span></code>
-(default), the version is detected from the <code class="docutils literal notranslate"><span class="pre">release</span></code>
-attribute of the root element.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Yields<span class="colon">:</span></dt>
-<dd class="field-even"><p>A <a class="reference internal" href="onixlib.models.product.html#onixlib.models.product.Product" title="onixlib.models.product.Product"><code class="xref py py-class docutils literal notranslate"><span class="pre">Product</span></code></a> facade for every product.</p>
-</dd>
-<dt class="field-odd">Lève<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>KeyError</strong> – if the detected or requested version is not registered.</p>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Lien vers cette rubrique">¶</a></h2>
 </section>
 </section>
 
@@ -319,26 +285,8 @@ attribute of the root element.</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="onixlib.tests.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">onixlib.tests package</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="onixlib.models.versions.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">onixlib.models.versions module</div>
-                
-              </div>
-            </a>
+          
+          
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -370,10 +318,7 @@ attribute of the root element.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">onixlib.parser package</a><ul>
-<li><a class="reference internal" href="#module-onixlib.parser">Module contents</a><ul>
-<li><a class="reference internal" href="#onixlib.parser.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#module-contents">Module contents</a></li>
 </ul>
 </li>
 </ul>

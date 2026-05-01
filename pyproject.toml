@@ -1,6 +1,6 @@
 [project]
 name = "onixlib"
-version = "0.1.0"
+version = "0.1.1"
 description = "Bibliothèque souveraine pour parser ou créer les fichiers ONIX pour les métiers du livre."
 authors = [{name="Rémi Verschuur", email="rverschuur@audit-io.fr"}]
 readme = "README.md"
@@ -53,6 +53,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "dilicom_parser.utils" = ["*.toml"]
+"onixlib" = ["py.typed", "*.pyi", "models/*.pyi"]
 
 # ---------------------------------------------------------------------------
 # xsdata — configuration de génération

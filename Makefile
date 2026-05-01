@@ -143,6 +143,11 @@ build: clean-dist
 	@echo ""
 	@echo "  Package généré dans dist/"
 
+build-verify:
+	$(PYTHON) -m twine check dist/*
+	@echo ""
+	@echo "  Vérification des artefacts de build : OK"
+
 # ---------------------------------------------------------------------------
 # Release (tests + doc + build)
 # ---------------------------------------------------------------------------
@@ -155,6 +160,18 @@ release: test docs build
 	@echo ""
 	@echo "  Pour publier sur PyPI  : twine upload dist/*"
 	@echo "  Pour taguer sur GitHub : git tag vX.Y.Z && git push origin main --tags"
+
+# ---------------------------------------------------------------------------
+# Publication sur PyPI
+# ---------------------------------------------------------------------------
+
+publish:
+	@echo "AVERTISSEMENT : cette action publie le package sur PyPI."
+	@read -p "Confirmer (oui/non) : " ans && [ "$$ans" = "oui" ] || { echo "Annulé."; exit 1; }
+	twine upload dist/*
+	@echo ""
+	@echo "  Package publié sur PyPI. N'oubliez pas de taguer la release sur GitHub."
+	@echo "  Exemple : git tag vX.Y.Z && git push origin main --tags"
 
 # ---------------------------------------------------------------------------
 # Nettoyage

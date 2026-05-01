@@ -9,7 +9,6 @@ Subpackages
 
    onixlib.cli
    onixlib.models
-   onixlib.parser
    onixlib.tests
    onixlib.utils
 
