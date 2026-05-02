@@ -229,9 +229,11 @@ class Notice:
 
     def to_xml(self) -> str:
         """Serialize this notice to an ONIX 3.0 XML string."""
+        release = self._raw.release.value if self._raw.release else _DEFAULT_RELEASE
+        ns = _versions.get(release).namespace
         out = StringIO()
-        _xml_serializer.write(out, self._raw)  # type: ignore[misc]
-        return out.getvalue().replace('ns0:', '')
+        _xml_serializer.write(out, self._raw, ns_map={None: ns})  # type: ignore[misc]
+        return out.getvalue()
 
     # ------------------------------------------------------------------ #
     # Raw access                                                           #

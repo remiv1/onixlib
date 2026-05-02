@@ -2,11 +2,39 @@
 
 from __future__ import annotations
 
+from decimal import Decimal
 from xml.etree.ElementTree import fromstring
 
 import pytest   # pyright: ignore[reportUnusedImport] # pylint: disable=unused-import
 
 from onixlib.models.contributor import ContributorRole, Contributor
+from onixlib.models.generated.v3_0 import (
+    CurrencyCode,
+    Idvalue,
+    List44,
+    List45,
+    List58,
+    List65,
+    List93,
+    List96,
+    Price as _RawPrice,
+    PriceAmount,
+    PriceType,
+    ProductAvailability,
+    ProductSupply as _RawProductSupply,
+    Publisher,
+    PublisherIdentifier,
+    PublisherIdtype,
+    PublisherName,
+    PublishingDetail as _RawPublishingDetail,
+    PublishingRole,
+    SupplyDetail as _RawSupplyDetail,
+    Supplier,
+    SupplierName,
+    SupplierRole,
+    Tax,
+    TaxRatePercent,
+)
 from onixlib.models.product import Product
 
 
@@ -240,6 +268,87 @@ class TestProductBlocks:
         """Test que le bloc RelatedMaterial est None par défaut."""
         p = Product.new()
         assert p.related_material is None
+
+
+# ---------------------------------------------------------------------------
+# Façades editor / price
+# ---------------------------------------------------------------------------
+
+class TestProductEditorAndPrice:
+    """Tests des façades editor et price du produit."""
+
+    @staticmethod
+    def _make_product_with_editor_and_prices() -> Product:
+        p = Product.new()
+
+        p.raw.publishing_detail = _RawPublishingDetail(
+            publisher=[
+                Publisher(
+                    publishing_role=PublishingRole(value=List45("01")),
+                    publisher_identifier=[
+                        PublisherIdentifier(
+                            publisher_idtype=PublisherIdtype(value=List44("06")),
+                            idvalue=Idvalue(value="3017000002108"),
+                        )
+                    ],
+                    publisher_name=PublisherName(value="AVM DIFFUSION"),
+                )
+            ]
+        )
+
+        p.raw.product_supply = [
+            _RawProductSupply(
+                supply_detail=[
+                    _RawSupplyDetail(
+                        supplier=Supplier(
+                            supplier_role=SupplierRole(value=List93("02")),
+                            supplier_name=SupplierName(value="AVM DIFFUSION"),
+                        ),
+                        product_availability=ProductAvailability(value=List65("20")),
+                        price=[
+                            _RawPrice(
+                                price_type=PriceType(value=List58("04")),
+                                price_amount=PriceAmount(value="6.30"),
+                                tax=[Tax(tax_rate_percent=TaxRatePercent(value=Decimal("5.5")))],
+                                currency_code=CurrencyCode(value=List96("EUR")),
+                            ),
+                            _RawPrice(
+                                price_type=PriceType(value=List58("01")),
+                                price_amount=PriceAmount(value="5.97"),
+                                currency_code=CurrencyCode(value=List96("EUR")),
+                            ),
+                        ],
+                    )
+                ]
+            )
+        ]
+        return p
+
+    def test_editor_returns_name_and_gln(self):
+        """Test que editor expose correctement le nom et le GLN."""
+        p = self._make_product_with_editor_and_prices()
+        assert p.editor is not None
+        assert p.editor.name == "AVM DIFFUSION"
+        assert p.editor.gln == "3017000002108"
+
+    def test_editor_none_when_absent(self):
+        """Test que editor est None en l'absence de PublishingDetail."""
+        p = Product.new()
+        assert p.editor is None
+
+    def test_price_returns_ht_ttc_currency_vat_rate(self):
+        """Test que price expose ht, ttc, currency et vat_rate."""
+        p = self._make_product_with_editor_and_prices()
+        assert p.price is not None
+        assert p.price.ht == Decimal("5.97")
+        assert p.price.ttc == Decimal("6.30")
+        assert p.price.currency == "EUR"
+        assert p.price.vat_rate == Decimal("5.5")
+
+    def test_price_none_when_absent(self):
+        """Test que price est None sans bloc ProductSupply."""
+        p = Product.new()
+        assert p.price is None
 
 
 # ---------------------------------------------------------------------------

@@ -375,6 +375,37 @@ Scénarios testés :
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="onixlib.tests.test_product.TestProductEditorAndPrice">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">onixlib.tests.test_product.</span></span><span class="sig-name descname"><span class="pre">TestProductEditorAndPrice</span></span><a class="headerlink" href="#onixlib.tests.test_product.TestProductEditorAndPrice" title="Lien vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Tests des façades editor et price du produit.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="onixlib.tests.test_product.TestProductEditorAndPrice.test_editor_none_when_absent">
+<span class="sig-name descname"><span class="pre">test_editor_none_when_absent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#onixlib.tests.test_product.TestProductEditorAndPrice.test_editor_none_when_absent" title="Lien vers cette définition">¶</a></dt>
+<dd><p>Test que editor est None en l’absence de PublishingDetail.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="onixlib.tests.test_product.TestProductEditorAndPrice.test_editor_returns_name_and_gln">
+<span class="sig-name descname"><span class="pre">test_editor_returns_name_and_gln</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#onixlib.tests.test_product.TestProductEditorAndPrice.test_editor_returns_name_and_gln" title="Lien vers cette définition">¶</a></dt>
+<dd><p>Test que editor expose correctement le nom et le GLN.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="onixlib.tests.test_product.TestProductEditorAndPrice.test_price_none_when_absent">
+<span class="sig-name descname"><span class="pre">test_price_none_when_absent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#onixlib.tests.test_product.TestProductEditorAndPrice.test_price_none_when_absent" title="Lien vers cette définition">¶</a></dt>
+<dd><p>Test que price est None sans bloc ProductSupply.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="onixlib.tests.test_product.TestProductEditorAndPrice.test_price_returns_ht_ttc_currency_vat_rate">
+<span class="sig-name descname"><span class="pre">test_price_returns_ht_ttc_currency_vat_rate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#onixlib.tests.test_product.TestProductEditorAndPrice.test_price_returns_ht_ttc_currency_vat_rate" title="Lien vers cette définition">¶</a></dt>
+<dd><p>Test que price expose ht, ttc, currency et vat_rate.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="onixlib.tests.test_product.TestProductIsbn">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">onixlib.tests.test_product.</span></span><span class="sig-name descname"><span class="pre">TestProductIsbn</span></span><a class="headerlink" href="#onixlib.tests.test_product.TestProductIsbn" title="Lien vers cette définition">¶</a></dt>
 <dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -633,6 +664,13 @@ Scénarios testés :
 <li><a class="reference internal" href="#onixlib.tests.test_product.TestProductContributors.test_author_none_by_default"><code class="docutils literal notranslate"><span class="pre">TestProductContributors.test_author_none_by_default()</span></code></a></li>
 <li><a class="reference internal" href="#onixlib.tests.test_product.TestProductContributors.test_contributors_list"><code class="docutils literal notranslate"><span class="pre">TestProductContributors.test_contributors_list()</span></code></a></li>
 <li><a class="reference internal" href="#onixlib.tests.test_product.TestProductContributors.test_no_contributors_by_default"><code class="docutils literal notranslate"><span class="pre">TestProductContributors.test_no_contributors_by_default()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#onixlib.tests.test_product.TestProductEditorAndPrice"><code class="docutils literal notranslate"><span class="pre">TestProductEditorAndPrice</span></code></a><ul>
+<li><a class="reference internal" href="#onixlib.tests.test_product.TestProductEditorAndPrice.test_editor_none_when_absent"><code class="docutils literal notranslate"><span class="pre">TestProductEditorAndPrice.test_editor_none_when_absent()</span></code></a></li>
+<li><a class="reference internal" href="#onixlib.tests.test_product.TestProductEditorAndPrice.test_editor_returns_name_and_gln"><code class="docutils literal notranslate"><span class="pre">TestProductEditorAndPrice.test_editor_returns_name_and_gln()</span></code></a></li>
+<li><a class="reference internal" href="#onixlib.tests.test_product.TestProductEditorAndPrice.test_price_none_when_absent"><code class="docutils literal notranslate"><span class="pre">TestProductEditorAndPrice.test_price_none_when_absent()</span></code></a></li>
+<li><a class="reference internal" href="#onixlib.tests.test_product.TestProductEditorAndPrice.test_price_returns_ht_ttc_currency_vat_rate"><code class="docutils literal notranslate"><span class="pre">TestProductEditorAndPrice.test_price_returns_ht_ttc_currency_vat_rate()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#onixlib.tests.test_product.TestProductIsbn"><code class="docutils literal notranslate"><span class="pre">TestProductIsbn</span></code></a><ul>

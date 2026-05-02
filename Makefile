@@ -182,3 +182,11 @@ clean-generated:
 	@read -p "Confirmer (oui/non) : " ans && [ "$$ans" = "oui" ] || { echo "Annulé."; exit 1; }
 	rm -rf src/onixlib/models/generated/
 	@echo "Modèles supprimés. Relancer 'make generate-all' pour recréer."
+
+clean-repo:
+	@echo "ATTENTION : cette action supprime tous les build."
+	@read -p "Confirmer (oui/non) : " ans && [ "$$ans" = "oui" ] || { echo "Annulé."; exit 1; }
+	rm -rf dist/ build/ src/*.egg-info
+	@echo "Suppression des tous des caches de tests (pytest cache, __pycache__, .mypy_cache, .pytest_cache) et des artefacts de build."
+	find . -type d \( -name '__pycache__' -o -name '.mypy_cache' -o -name '.pytest_cache' \) -exec rm -rf {} +
+	@echo "Fichiers générés et de build supprimés. Relancer 'make generate-all' pour recréer les modèles."

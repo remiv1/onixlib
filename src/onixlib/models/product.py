@@ -22,7 +22,10 @@ Example usage::
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+from decimal import Decimal
 from io import StringIO
+from typing import Optional
 
 from xsdata.formats.dataclass.context import XmlContext
 from xsdata.formats.dataclass.serializers import XmlSerializer
@@ -39,6 +42,7 @@ from .generated.v3_0 import (
     List5,
     List150,
     NotificationType,
+    Price as _RawPrice,
     Product as _Product,
     ProductComposition,
     ProductForm,
@@ -54,6 +58,9 @@ __all__ = ["Product"]
 
 _ISBN13_TYPE = List5.VALUE_15  # "15" – ISBN-13
 _GTIN13_TYPE = List5.VALUE_03  # "03" – GTIN-13
+_PUBLISHER_GLN_TYPE = "06"  # List 44 code for GLN in PublisherIdentifier
+_PRICE_TYPE_HT = "01"  # RRP excluding tax
+_PRICE_TYPE_TTC = "04"  # RRP including tax
 
 _context = XmlContext()
 _serializer = XmlSerializer(
@@ -174,9 +181,125 @@ class Product:
         return self.descriptive.add_contributor(role)
 
     @property
+    def authors(self) -> Optional[list[Contributor]]:
+        """
+        List of contributor with role ``A01`` (written by) or ``A02`` (co-written by).
+        Delegates to :attr:`descriptive`.
+        """
+        authors = [
+            c for c in self.contributors if c.role in (ContributorRole.A01, ContributorRole.A02)
+        ]
+        return authors if authors else None
+
+    @property
     def author(self) -> Contributor | None:
-        """First contributor with role ``A01`` (written by). Delegates to :attr:`descriptive`."""
-        return self.descriptive.author if self.descriptive else None
+        """First contributor with role ``A01`` (written by), or ``None``."""
+        for contributor in self.contributors:
+            if contributor.role == ContributorRole.A01:
+                return contributor
+        return None
+
+    @dataclass(frozen=True)
+    class Editor:
+        """Editor facade extracted from the first ``<Publisher>`` block."""
+
+        gln: str | None
+        name: str | None
+
+    @dataclass(frozen=True)
+    class Price:
+        """Aggregated product price fields derived from ``<SupplyDetail>`` prices."""
+
+        ht: Decimal | None
+        ttc: Decimal | None
+        currency: str | None
+        vat_rate: Decimal | None
+
+    @property
+    def editor(self) -> Editor | None:
+        """Editor facade with ``gln`` and ``name``, or ``None`` if absent."""
+        publishing = self._raw.publishing_detail
+        if publishing is None or not publishing.publisher:
+            return None
+
+        pub = publishing.publisher[0]
+        name = pub.publisher_name.value if pub.publisher_name else None
+
+        gln: str | None = None
+        for identifier in pub.publisher_identifier:
+            if identifier.publisher_idtype.value.value == _PUBLISHER_GLN_TYPE:
+                gln = identifier.idvalue.value
+                break
+
+        if gln is None and name is None:
+            return None
+        return Product.Editor(gln=gln, name=name)
+
+    @staticmethod
+    def _iter_raw_prices(raw: _Product):
+        for product_supply in raw.product_supply:
+            for supply_detail in product_supply.supply_detail:
+                for price in supply_detail.price:
+                    yield price
+
+    @staticmethod
+    def _price_type(price: _RawPrice) -> str:
+        return price.price_type.value.value if price.price_type else ""
+
+    @staticmethod
+    def _price_amount(price: _RawPrice) -> Decimal | None:
+        if price.price_amount is None:
+            return None
+        return Decimal(str(price.price_amount.value))
+
+    @staticmethod
+    def _price_currency(price: _RawPrice) -> str | None:
+        return price.currency_code.value.value if price.currency_code else None
+
+    @staticmethod
+    def _price_vat_rate(price: _RawPrice) -> Decimal | None:
+        for tax in price.tax:
+            if tax.tax_rate_percent is not None:
+                return Decimal(str(tax.tax_rate_percent.value))
+        return None
+
+    @staticmethod
+    def _first_price_by_type(prices: list[_RawPrice], price_type: str) -> _RawPrice | None:
+        for price in prices:
+            if Product._price_type(price) == price_type:
+                return price
+        return None
+
+    @staticmethod
+    def _first_price_currency(prices: list[_RawPrice]) -> str | None:
+        for price in prices:
+            currency = Product._price_currency(price)
+            if currency is not None:
+                return currency
+        return None
+
+    @property
+    def price(self) -> Price | None:
+        """Price facade with ``ht``, ``ttc``, ``currency`` and ``vat_rate`` fields."""
+        prices = list(Product._iter_raw_prices(self._raw))
+        if not prices:
+            return None
+
+        ht_price = Product._first_price_by_type(prices, _PRICE_TYPE_HT)
+        ttc_price = Product._first_price_by_type(prices, _PRICE_TYPE_TTC)
+
+        ht = Product._price_amount(ht_price) if ht_price else None
+        ttc = Product._price_amount(ttc_price) if ttc_price else None
+        currency = (
+            Product._price_currency(ttc_price)
+            if ttc_price is not None
+            else Product._first_price_currency(prices)
+        )
+        vat_rate = Product._price_vat_rate(ttc_price) if ttc_price is not None else None
+
+        if ht is None and ttc is None and currency is None and vat_rate is None:
+            return None
+        return Product.Price(ht=ht, ttc=ttc, currency=currency, vat_rate=vat_rate)
 
     # ------------------------------------------------------------------ #
     # Block facades                                                        #

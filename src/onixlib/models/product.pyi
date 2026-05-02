@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+from decimal import Decimal
+from typing import Optional
 from .collateral import CollateralDetail
 from .contributor import Contributor, ContributorRole
 from .descriptive import DescriptiveDetail
@@ -40,6 +43,27 @@ class Product:
 
     @property
     def author(self) -> Contributor | None: ...
+
+    @property
+    def authors(self) -> Optional[list[Contributor]]: ...
+
+    @dataclass(frozen=True)
+    class Editor:
+        gln: str | None
+        name: str | None
+
+    @dataclass(frozen=True)
+    class Price:
+        ht: Decimal | None
+        ttc: Decimal | None
+        currency: str | None
+        vat_rate: Decimal | None
+
+    @property
+    def editor(self) -> Editor | None: ...
+
+    @property
+    def price(self) -> Price | None: ...
 
     @property
     def descriptive(self) -> DescriptiveDetail | None: ...
