@@ -9,25 +9,33 @@ import pytest   # pyright: ignore[reportUnusedImport] # pylint: disable=unused-i
 
 from onixlib.models.contributor import ContributorRole, Contributor
 from onixlib.models.generated.v3_0 import (
+    AgentIdentifier,
+    AgentIdtype,
+    AgentName,
+    AgentRole,
     CurrencyCode,
     Idvalue,
+    Imprint,
+    ImprintIdentifier,
+    ImprintIdtype,
+    ImprintName,
     List44,
-    List45,
     List58,
     List65,
+    List68,
+    List69,
+    List92,
     List93,
     List96,
+    MarketPublishingDetail,
+    MarketPublishingStatus,
     Price as _RawPrice,
     PriceAmount,
     PriceType,
     ProductAvailability,
     ProductSupply as _RawProductSupply,
-    Publisher,
-    PublisherIdentifier,
-    PublisherIdtype,
-    PublisherName,
     PublishingDetail as _RawPublishingDetail,
-    PublishingRole,
+    PublisherRepresentative,
     SupplyDetail as _RawSupplyDetail,
     Supplier,
     SupplierName,
@@ -282,22 +290,36 @@ class TestProductEditorAndPrice:
         p = Product.new()
 
         p.raw.publishing_detail = _RawPublishingDetail(
-            publisher=[
-                Publisher(
-                    publishing_role=PublishingRole(value=List45("01")),
-                    publisher_identifier=[
-                        PublisherIdentifier(
-                            publisher_idtype=PublisherIdtype(value=List44("06")),
+            imprint=[
+                Imprint(
+                    imprint_identifier=[
+                        ImprintIdentifier(
+                            imprint_idtype=ImprintIdtype(value=List44("06")),
                             idvalue=Idvalue(value="3017000002108"),
                         )
                     ],
-                    publisher_name=PublisherName(value="AVM DIFFUSION"),
+                    imprint_name=ImprintName(value="AVM DIFFUSION"),
                 )
             ]
         )
 
         p.raw.product_supply = [
             _RawProductSupply(
+                market_publishing_detail=MarketPublishingDetail(
+                    publisher_representative=[
+                        PublisherRepresentative(
+                            agent_role=AgentRole(value=List69("08")),
+                            agent_identifier=[
+                                AgentIdentifier(
+                                    agent_idtype=AgentIdtype(value=List92("06")),
+                                    idvalue=Idvalue(value="3019007122407"),
+                                )
+                            ],
+                            agent_name=AgentName(value="AVM"),
+                        )
+                    ],
+                    market_publishing_status=MarketPublishingStatus(value=List68("04")),
+                ),
                 supply_detail=[
                     _RawSupplyDetail(
                         supplier=Supplier(
@@ -319,7 +341,7 @@ class TestProductEditorAndPrice:
                             ),
                         ],
                     )
-                ]
+                ],
             )
         ]
         return p
@@ -335,6 +357,18 @@ class TestProductEditorAndPrice:
         """Test que editor est None en l'absence de PublishingDetail."""
         p = Product.new()
         assert p.editor is None
+
+    def test_publisher_returns_name_and_gln(self):
+        """Test que publisher expose correctement le nom et le GLN de l'agent représentant."""
+        p = self._make_product_with_editor_and_prices()
+        assert p.publisher is not None
+        assert p.publisher.name == "AVM"
+        assert p.publisher.gln == "3019007122407"
+
+    def test_publisher_none_when_absent(self):
+        """Test que publisher est None sans MarketPublishingDetail."""
+        p = Product.new()
+        assert p.publisher is None
 
     def test_price_returns_ht_ttc_currency_vat_rate(self):
         """Test que price expose ht, ttc, currency et vat_rate."""

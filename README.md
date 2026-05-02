@@ -176,6 +176,7 @@ Façade centrale sur un bloc `<Product>` ONIX.
 | `author` | `Contributor \| None` | Premier contributeur de rôle A01 |
 | `editor` | `Product.Editor \| None` | Détails de l'éditeur (raccourci vers `publishing`) |
 | `price` | `Product.Price \| None` | Premier prix du produit (raccourci vers `product_supply`) |
+| `publisher` | `Product.Publisher \| None` | Détails de l'éditeur (raccourci vers `product_supply`) |
 | `contributors` | `list[Contributor]` | Tous les contributeurs |
 | `add_contributor(role)` | `Contributor` | Ajoute un contributeur |
 | `descriptive` | `DescriptiveDetail \| None` | Bloc descriptif |

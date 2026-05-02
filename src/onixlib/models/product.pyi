@@ -53,6 +53,11 @@ class Product:
         name: str | None
 
     @dataclass(frozen=True)
+    class Publisher:
+        gln: str | None
+        name: str | None
+
+    @dataclass(frozen=True)
     class Price:
         ht: Decimal | None
         ttc: Decimal | None
@@ -61,6 +66,9 @@ class Product:
 
     @property
     def editor(self) -> Editor | None: ...
+
+    @property
+    def publisher(self) -> Publisher | None: ...
 
     @property
     def price(self) -> Price | None: ...

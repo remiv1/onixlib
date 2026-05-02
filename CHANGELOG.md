@@ -27,3 +27,12 @@
 - Added `authors` property to `Product` model to retrieve all contributors with role "A01" (written by) and "A02" (co-written by).
 - Added `editor` property to `Product` model to retrieve gln and name of the first publisher in supplier detail, if available.
 - Added `price` property to `Product` model to retrieve the first price of the product, if available (ttc, ht, currency, vat rate).
+
+## [0.1.3] - 2026-05-02
+
+### 2026-05-02 Fixed
+
+- Refactored `editor` property to use a helper method `_extract_gln` for better readability and maintainability.
+- Added type annotations to the `_extract_gln` method for improved code clarity.
+- Removed unused imports and cleaned up code for better readability.
+- Added `publisher` property to `Product` model to retrieve the publisher information (gln and name) from the first publisher representative in supplier detail, if available.

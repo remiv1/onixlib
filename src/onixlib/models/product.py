@@ -40,6 +40,8 @@ from .generated.v3_0 import (
     List1,
     List2,
     List5,
+    List44,
+    List92,
     List150,
     NotificationType,
     Price as _RawPrice,
@@ -48,6 +50,7 @@ from .generated.v3_0 import (
     ProductForm,
     ProductIdentifier,
     ProductIdtype,
+    PublisherRepresentative,
     RecordReference,
 )
 from .product_supply import ProductSupply
@@ -58,7 +61,8 @@ __all__ = ["Product"]
 
 _ISBN13_TYPE = List5.VALUE_15  # "15" – ISBN-13
 _GTIN13_TYPE = List5.VALUE_03  # "03" – GTIN-13
-_PUBLISHER_GLN_TYPE = "06"  # List 44 code for GLN in PublisherIdentifier
+_IMPRINT_GLN_TYPE = List44.VALUE_06  # GLN in ImprintIdentifier (List 44)
+_AGENT_GLN_TYPE = List92.VALUE_06    # GLN in AgentIdentifier (List 92)
 _PRICE_TYPE_HT = "01"  # RRP excluding tax
 _PRICE_TYPE_TTC = "04"  # RRP including tax
 
@@ -201,7 +205,14 @@ class Product:
 
     @dataclass(frozen=True)
     class Editor:
-        """Editor facade extracted from the first ``<Publisher>`` block."""
+        """Editor facade extracted from the ``<Imprint>`` block in PublishingDetail."""
+
+        gln: str | None
+        name: str | None
+
+    @dataclass(frozen=True)
+    class Publisher:
+        """Publisher representative facade extracted from ``<PublisherRepresentative>``."""
 
         gln: str | None
         name: str | None
@@ -217,23 +228,42 @@ class Product:
 
     @property
     def editor(self) -> Editor | None:
-        """Editor facade with ``gln`` and ``name``, or ``None`` if absent."""
+        """Editor facade with ``gln`` and ``name`` from the first ``<Imprint>`` in PublishingDetail, or ``None`` if absent."""
         publishing = self._raw.publishing_detail
-        if publishing is None or not publishing.publisher:
+        if publishing is None or not publishing.imprint:
             return None
 
-        pub = publishing.publisher[0]
-        name = pub.publisher_name.value if pub.publisher_name else None
+        for imp in publishing.imprint:
+            gln: str | None = None
+            for identifier in imp.imprint_identifier:
+                if identifier.imprint_idtype.value == _IMPRINT_GLN_TYPE:
+                    gln = identifier.idvalue.value
+                    break
+            name = imp.imprint_name.value if imp.imprint_name else None
+            if gln is not None or name is not None:
+                return Product.Editor(gln=gln, name=name)
+        return None
 
-        gln: str | None = None
-        for identifier in pub.publisher_identifier:
-            if identifier.publisher_idtype.value.value == _PUBLISHER_GLN_TYPE:
-                gln = identifier.idvalue.value
-                break
+    @property
+    def publisher(self) -> Publisher | None:
+        """Publisher representative facade from ``<PublisherRepresentative>`` in ProductSupply, or ``None`` if absent."""
+        for product_supply in self._raw.product_supply:
+            mpd = product_supply.market_publishing_detail
+            if not mpd:
+                continue
+            for rep in mpd.publisher_representative:
+                gln = self._extract_gln(rep)
+                name = rep.agent_name.value if rep.agent_name else None
+                if gln or name:
+                    return Product.Publisher(gln=gln, name=name)
+        return None
 
-        if gln is None and name is None:
-            return None
-        return Product.Editor(gln=gln, name=name)
+    def _extract_gln(self, rep: PublisherRepresentative) -> str | None:
+        """Return the GLN identifier from <AgentIdentifier>, or None if absent."""
+        for identifier in rep.agent_identifier:
+            if identifier.agent_idtype.value == _AGENT_GLN_TYPE:
+                return identifier.idvalue.value
+        return None
 
     @staticmethod
     def _iter_raw_prices(raw: _Product):

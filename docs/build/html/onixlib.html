@@ -437,6 +437,7 @@
 <li class="toctree-l3"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product"><code class="docutils literal notranslate"><span class="pre">Product</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.Editor"><code class="docutils literal notranslate"><span class="pre">Product.Editor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.Price"><code class="docutils literal notranslate"><span class="pre">Product.Price</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.Publisher"><code class="docutils literal notranslate"><span class="pre">Product.Publisher</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.add_contributor"><code class="docutils literal notranslate"><span class="pre">Product.add_contributor()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.author"><code class="docutils literal notranslate"><span class="pre">Product.author</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.authors"><code class="docutils literal notranslate"><span class="pre">Product.authors</span></code></a></li>
@@ -448,6 +449,7 @@
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.new"><code class="docutils literal notranslate"><span class="pre">Product.new()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.price"><code class="docutils literal notranslate"><span class="pre">Product.price</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.product_supply"><code class="docutils literal notranslate"><span class="pre">Product.product_supply</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.publisher"><code class="docutils literal notranslate"><span class="pre">Product.publisher</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.publishing"><code class="docutils literal notranslate"><span class="pre">Product.publishing</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.raw"><code class="docutils literal notranslate"><span class="pre">Product.raw</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="onixlib.models.html#onixlib.models.Product.related_material"><code class="docutils literal notranslate"><span class="pre">Product.related_material</span></code></a></li>
@@ -1021,7 +1023,7 @@ reading files of a different version.</p></li>
 <dt class="sig sig-object py" id="onixlib.Product.Editor">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Editor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gln</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#onixlib.Product.Editor" title="Lien vers cette définition">¶</a></dt>
 <dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Editor facade extracted from the first <code class="docutils literal notranslate"><span class="pre">&lt;Publisher&gt;</span></code> block.</p>
+<p>Editor facade extracted from the <code class="docutils literal notranslate"><span class="pre">&lt;Imprint&gt;</span></code> block in PublishingDetail.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="onixlib.Product.Editor.gln">
 <span class="sig-name descname"><span class="pre">gln</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#onixlib.Product.Editor.gln" title="Lien vers cette définition">¶</a></dt>
@@ -1057,6 +1059,23 @@ reading files of a different version.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="onixlib.Product.Price.vat_rate">
 <span class="sig-name descname"><span class="pre">vat_rate</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#onixlib.Product.Price.vat_rate" title="Lien vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="onixlib.Product.Publisher">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Publisher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gln</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#onixlib.Product.Publisher" title="Lien vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Publisher representative facade extracted from <code class="docutils literal notranslate"><span class="pre">&lt;PublisherRepresentative&gt;</span></code>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="onixlib.Product.Publisher.gln">
+<span class="sig-name descname"><span class="pre">gln</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#onixlib.Product.Publisher.gln" title="Lien vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="onixlib.Product.Publisher.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#onixlib.Product.Publisher.name" title="Lien vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1109,7 +1128,7 @@ Delegates to <a class="reference internal" href="#onixlib.Product.descriptive" t
 <dl class="py property">
 <dt class="sig sig-object py" id="onixlib.Product.editor">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">editor</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#onixlib.Product.Editor" title="onixlib.Product.Editor"><span class="pre">Editor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#onixlib.Product.editor" title="Lien vers cette définition">¶</a></dt>
-<dd><p>Editor facade with <code class="docutils literal notranslate"><span class="pre">gln</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if absent.</p>
+<dd><p>Editor facade with <code class="docutils literal notranslate"><span class="pre">gln</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> from the first <code class="docutils literal notranslate"><span class="pre">&lt;Imprint&gt;</span></code> in PublishingDetail, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if absent.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1148,6 +1167,12 @@ Delegates to <a class="reference internal" href="#onixlib.Product.descriptive" t
 <dt class="sig sig-object py" id="onixlib.Product.product_supply">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">product_supply</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="onixlib.models.product_supply.html#onixlib.models.product_supply.ProductSupply" title="onixlib.models.product_supply.ProductSupply"><span class="pre">ProductSupply</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#onixlib.Product.product_supply" title="Lien vers cette définition">¶</a></dt>
 <dd><p>List of facades over each <code class="docutils literal notranslate"><span class="pre">&lt;ProductSupply&gt;</span></code> block.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="onixlib.Product.publisher">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">publisher</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#onixlib.Product.Publisher" title="onixlib.Product.Publisher"><span class="pre">Publisher</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#onixlib.Product.publisher" title="Lien vers cette définition">¶</a></dt>
+<dd><p>Publisher representative facade from <code class="docutils literal notranslate"><span class="pre">&lt;PublisherRepresentative&gt;</span></code> in ProductSupply, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if absent.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1601,6 +1626,11 @@ attribute of the root element.</p></li>
 <li><a class="reference internal" href="#onixlib.Product.Price.vat_rate"><code class="docutils literal notranslate"><span class="pre">Product.Price.vat_rate</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#onixlib.Product.Publisher"><code class="docutils literal notranslate"><span class="pre">Product.Publisher</span></code></a><ul>
+<li><a class="reference internal" href="#onixlib.Product.Publisher.gln"><code class="docutils literal notranslate"><span class="pre">Product.Publisher.gln</span></code></a></li>
+<li><a class="reference internal" href="#onixlib.Product.Publisher.name"><code class="docutils literal notranslate"><span class="pre">Product.Publisher.name</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#onixlib.Product.add_contributor"><code class="docutils literal notranslate"><span class="pre">Product.add_contributor()</span></code></a></li>
 <li><a class="reference internal" href="#onixlib.Product.author"><code class="docutils literal notranslate"><span class="pre">Product.author</span></code></a></li>
 <li><a class="reference internal" href="#onixlib.Product.authors"><code class="docutils literal notranslate"><span class="pre">Product.authors</span></code></a></li>
@@ -1612,6 +1642,7 @@ attribute of the root element.</p></li>
 <li><a class="reference internal" href="#onixlib.Product.new"><code class="docutils literal notranslate"><span class="pre">Product.new()</span></code></a></li>
 <li><a class="reference internal" href="#onixlib.Product.price"><code class="docutils literal notranslate"><span class="pre">Product.price</span></code></a></li>
 <li><a class="reference internal" href="#onixlib.Product.product_supply"><code class="docutils literal notranslate"><span class="pre">Product.product_supply</span></code></a></li>
+<li><a class="reference internal" href="#onixlib.Product.publisher"><code class="docutils literal notranslate"><span class="pre">Product.publisher</span></code></a></li>
 <li><a class="reference internal" href="#onixlib.Product.publishing"><code class="docutils literal notranslate"><span class="pre">Product.publishing</span></code></a></li>
 <li><a class="reference internal" href="#onixlib.Product.raw"><code class="docutils literal notranslate"><span class="pre">Product.raw</span></code></a></li>
 <li><a class="reference internal" href="#onixlib.Product.related_material"><code class="docutils literal notranslate"><span class="pre">Product.related_material</span></code></a></li>
