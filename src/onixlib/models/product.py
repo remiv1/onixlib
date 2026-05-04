@@ -42,6 +42,7 @@ from .generated.v3_0 import (
     List5,
     List44,
     List92,
+    List93,
     List150,
     NotificationType,
     Price as _RawPrice,
@@ -50,7 +51,7 @@ from .generated.v3_0 import (
     ProductForm,
     ProductIdentifier,
     ProductIdtype,
-    PublisherRepresentative,
+    SupplyDetail,
     RecordReference,
 )
 from .product_supply import ProductSupply
@@ -62,7 +63,7 @@ __all__ = ["Product"]
 _ISBN13_TYPE = List5.VALUE_15  # "15" – ISBN-13
 _GTIN13_TYPE = List5.VALUE_03  # "03" – GTIN-13
 _IMPRINT_GLN_TYPE = List44.VALUE_06  # GLN in ImprintIdentifier (List 44)
-_AGENT_GLN_TYPE = List92.VALUE_06    # GLN in AgentIdentifier (List 92)
+_SUPPLIER_GLN_TYPE = List92.VALUE_06    # GLN in SupplierIdentifier (List 92)
 _PRICE_TYPE_HT = "01"  # RRP excluding tax
 _PRICE_TYPE_TTC = "04"  # RRP including tax
 
@@ -248,22 +249,25 @@ class Product:
     def publisher(self) -> Publisher | None:
         """Publisher representative facade from ``<PublisherRepresentative>`` in ProductSupply, or ``None`` if absent."""
         for product_supply in self._raw.product_supply:
-            mpd = product_supply.market_publishing_detail
-            if not mpd:
+            sd = product_supply.supply_detail
+            if not sd:
                 continue
-            for rep in mpd.publisher_representative:
-                gln = self._extract_gln(rep)
-                name = rep.agent_name.value if rep.agent_name else None
-                if gln or name:
-                    return Product.Publisher(gln=gln, name=name)
-        return None
+            gln, name = self._extract_gln_and_name(sd)
+            if not(gln or name):
+                return None
+            return Product.Publisher(gln=gln, name=name)
 
-    def _extract_gln(self, rep: PublisherRepresentative) -> str | None:
-        """Return the GLN identifier from <AgentIdentifier>, or None if absent."""
-        for identifier in rep.agent_identifier:
-            if identifier.agent_idtype.value == _AGENT_GLN_TYPE:
-                return identifier.idvalue.value
-        return None
+    def _extract_gln_and_name(self, sup: list[SupplyDetail]) -> tuple[str | None, str | None]:
+        """Return the GLN identifier from <SupplierIdentifier>, or None if absent."""
+        for sd in sup:
+            s = sd.supplier
+            if s.supplier_role.value == List93.VALUE_02:
+                for si in s.supplier_identifier:
+                    if si.supplier_idtype.value == _SUPPLIER_GLN_TYPE:
+                        gln = si.idvalue.value
+                        name = s.supplier_name.value if s.supplier_name else None
+                        return gln, name
+        return None, None
 
     @staticmethod
     def _iter_raw_prices(raw: _Product):

@@ -40,6 +40,8 @@ from onixlib.models.generated.v3_0 import (
     Supplier,
     SupplierName,
     SupplierRole,
+    SupplierIdentifier,
+    SupplierIdtype,
     Tax,
     TaxRatePercent,
 )
@@ -325,6 +327,12 @@ class TestProductEditorAndPrice:
                         supplier=Supplier(
                             supplier_role=SupplierRole(value=List93("02")),
                             supplier_name=SupplierName(value="AVM DIFFUSION"),
+                            supplier_identifier=[
+                                SupplierIdentifier(
+                                    supplier_idtype=SupplierIdtype(value=List92.VALUE_06),
+                                    idvalue=Idvalue(value="3017000002108"),
+                                )
+                            ]
                         ),
                         product_availability=ProductAvailability(value=List65("20")),
                         price=[
@@ -346,27 +354,15 @@ class TestProductEditorAndPrice:
         ]
         return p
 
-    def test_editor_returns_name_and_gln(self):
-        """Test que editor expose correctement le nom et le GLN."""
-        p = self._make_product_with_editor_and_prices()
-        assert p.editor is not None
-        assert p.editor.name == "AVM DIFFUSION"
-        assert p.editor.gln == "3017000002108"
-
-    def test_editor_none_when_absent(self):
-        """Test que editor est None en l'absence de PublishingDetail."""
-        p = Product.new()
-        assert p.editor is None
-
     def test_publisher_returns_name_and_gln(self):
-        """Test que publisher expose correctement le nom et le GLN de l'agent représentant."""
+        """Test que publisher expose correctement le nom et le GLN."""
         p = self._make_product_with_editor_and_prices()
         assert p.publisher is not None
-        assert p.publisher.name == "AVM"
-        assert p.publisher.gln == "3019007122407"
+        assert p.publisher.name == "AVM DIFFUSION"
+        assert p.publisher.gln == "3017000002108"
 
     def test_publisher_none_when_absent(self):
-        """Test que publisher est None sans MarketPublishingDetail."""
+        """Test que publisher est None en l'absence de PublishingDetail."""
         p = Product.new()
         assert p.publisher is None
 

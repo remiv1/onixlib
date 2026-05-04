@@ -36,3 +36,10 @@
 - Added type annotations to the `_extract_gln` method for improved code clarity.
 - Removed unused imports and cleaned up code for better readability.
 - Added `publisher` property to `Product` model to retrieve the publisher information (gln and name) from the first publisher representative in supplier detail, if available.
+
+## [0.1.4] - 2026-05-04
+
+### 2026-05-04 Fixed
+
+- Fix bad handling of supplier gln and name in publisher property by refactoring the code to extract both gln and name together in a helper method `_extract_gln_and_name`.
+- Fix dependencies in `pyproject.toml` by adding the xsdata dependency.
